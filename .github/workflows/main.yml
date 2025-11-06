@@ -21,7 +21,7 @@ jobs:
       - name: Build firmware
         run: |
           platformio update
-          platformio run --environment esp32-s3
+          platformio run --environment esp32-s3-dev
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
