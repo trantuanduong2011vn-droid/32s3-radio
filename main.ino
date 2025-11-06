@@ -1,3 +1,10 @@
+/*
+  SmartDisplay ESP32-S3 Radio
+  - For ST7789 240x240
+  - MAX98357A I2S DAC
+  - WiFi credentials embedded (SSID="Bin§Bon")
+*/
+
 #include <WiFi.h>
 #include <Audio.h>
 #include <TFT_eSPI.h>
@@ -7,7 +14,7 @@
 const char* ssid = "Bin§Bon";
 const char* password = "khongcanpass";
 
-// I2S pins for MAX98357A (default as discussed)
+// I2S pins for MAX98357A
 #define I2S_BCLK 26
 #define I2S_LRC 25
 #define I2S_DOUT 22
@@ -16,7 +23,8 @@ const char* password = "khongcanpass";
 #define BTN_NEXT 0
 
 // === ST7789 pins (defaults) ===
-// CS = 5, DC = 2, RST = 4, MOSI = 23, SCLK = 18
+// MOSI = 23, SCLK = 18, DC = 2, RST = 4, CS = 5
+// Make sure TFT_eSPI User_Setup.h matches these pins and TFT size 240x240
 
 // === RADIO STATIONS ===
 const char* stations[] = {
@@ -36,7 +44,6 @@ int barHeight[20];
 unsigned long lastDraw = 0;
 unsigned long lastDebounce = 0;
 bool btnLastState = HIGH;
-bool showInfoOnce = false;
 
 void setup() {
   Serial.begin(115200);
@@ -86,7 +93,7 @@ void setup() {
   // prepare bars
   for (int i = 0; i < 20; i++) barHeight[i] = random(10, 80);
 
-  // start first station (only if WiFi connected, otherwise require Serial command)
+  // start first station (only if WiFi connected)
   if (WiFi.status() == WL_CONNECTED && strlen(stations[0]) > 0) {
     audio.connecttohost(stations[currentStation]);
   }
@@ -116,7 +123,7 @@ void loop() {
   }
   btnLastState = btn;
 
-  // Serial commands: 'n' = next, 'p' = prev, 's' = status, 'c' = connect if not connected
+  // Serial commands
   if (Serial.available()) {
     char c = Serial.read();
     if (c == 'n') nextStation();
