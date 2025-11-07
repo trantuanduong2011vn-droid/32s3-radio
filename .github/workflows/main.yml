@@ -5,7 +5,8 @@ on:
   push:
     branches: [ main ]
   workflow_dispatch:
-
+- name: Giải nén thư viện
+  run: unzip lib/ESP32S3-AudioI2S.zip -d lib/
 jobs:
   build:
     runs-on: ubuntu-latest
