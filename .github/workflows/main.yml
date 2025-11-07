@@ -5,8 +5,6 @@ on:
   push:
     branches: [ main ]
   workflow_dispatch:
-- name: Giải nén thư viện
-  run: unzip lib/ESP32S3-AudioI2S.zip -d lib/
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -28,3 +26,10 @@ jobs:
         with:
           name: firmware
           path: .pio/build/lolin_s3/firmware.bin
+          - name: Giải nén thư viện Audio
+  run: unzip lib/audioI2.zip -d lib/
+
+- name: Cập nhật và build
+  run: |
+    platformio update
+    platformio run --environment lolin_s3_mini
