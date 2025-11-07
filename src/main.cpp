@@ -56,7 +56,7 @@ void setup() {
   audio.setVolume(15); // âm lượng 0-21
 
   // Bắt đầu phát radio
-  audio.connecttohost(radioStream);
+  audio.connectToHost(radioStream);
 
   tft.setTextColor(TFT_GREEN);
   tft.println("Playing online radio...");
