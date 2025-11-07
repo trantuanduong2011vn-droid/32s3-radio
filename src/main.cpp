@@ -14,7 +14,7 @@ TFT_eSPI tft = TFT_eSPI();  // dùng config sẵn trong User_Setup_Select.h
 
 // ================== Cấu hình Audio MAX98357A ==================
 Audio audio;
-#define I2S_DOUT  25   // kết nối với DIN trên module MAX98357A
+#define I2S_DOUT  25 
 #define I2S_BCLK  26
 #define I2S_LRC   27
 
