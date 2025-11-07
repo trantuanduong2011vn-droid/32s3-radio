@@ -21,9 +21,9 @@ jobs:
       - name: Build firmware
         run: |
           platformio update
-          platformio run --environment lolin-s3-mini
+          platformio run --environment lolin_s3_mini
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: firmware
-          path: .pio/build/lolin-s3/firmware.bin
+          path: .pio/build/lolin_s3/firmware.bin
