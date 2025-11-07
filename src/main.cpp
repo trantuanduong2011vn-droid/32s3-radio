@@ -5,11 +5,13 @@
 #include "Audio.h"
 
 // ================== Cấu hình WiFi ==================
-const char* ssid     = "Bin§Bon";
+// LƯU Ý: WiFi.begin() không hỗ trợ SSID có ký tự đặc biệt (như '§') trong mọi trường hợp. 
+// Nếu gặp lỗi, hãy thử đổi tên SSID.
+const char* ssid     = "Bin§Bon"; 
 const char* password = "khongcanpass";
 
 // ================== Cấu hình màn hình ST7789 ==================
-TFT_eSPI tft = TFT_eSPI();  // dùng config sẵn trong User_Setup_Select.h
+TFT_eSPI tft = TFT_eSPI();  // dùng config sẵn trong platformio.ini/User_Setup_Select.h
 
 // ================== Cấu hình Audio MAX98357A ==================
 Audio audio;
@@ -44,24 +46,27 @@ void setup() {
     tft.print(".");
     if (++counter > 30) {
       tft.println(" WiFi failed!");
+      Serial.println("WiFi connection failed.");
       return;
     }
   }
   tft.println("\nWiFi connected!");
   tft.println(WiFi.localIP());
+  Serial.println("WiFi connected.");
 
-  // Cấu hình âm thanh
+  // Cấu hình âm thanh (Sử dụng hàm mới của thư viện 3.4.x)
   audio.setPinout(I2S_BCLK, I2S_LRC, I2S_DOUT);
   audio.setVolume(15); // âm lượng 0-21
 
-  // Bắt đầu phát radio
+  // Bắt đầu phát radio (Sử dụng hàm mới connectToHost)
   audio.connectToHost(radioStream);
 
   tft.setTextColor(TFT_GREEN);
   tft.println("Playing online radio...");
 }
 
-// ================== Vòng lặp ==================
-void processLoop() {
-  audio.processLoop();  // giữ luồng phát liên tục
+// ================== Vòng lặp BẮT BUỘC ==================
+void loop() { // << PHẢI là loop() (chữ thường)
+  audio.processLoop();  // << Hàm duy trì luồng phát của thư viện Audio 3.4.x
+  // Thêm các tác vụ khác (như cập nhật màn hình, kiểm tra nút nhấn) vào đây
 }
