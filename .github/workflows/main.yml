@@ -1,41 +1,32 @@
-name: Build ESP32S3 Project
+name: Build ESP32S3 Firmware
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ main ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ main ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      # Bước 1: Lấy mã nguồn
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Bước 2: Cài PlatformIO
-      - name: Cài đặt PlatformIO
-        run: pip install platformio
+      - name: Setup PlatformIO
+        run: pip install -U platformio
 
-      # Bước 3: Kiểm tra file zip trong thư mục lib
-      - name: Kiểm tra file thư viện
-        run: ls -l lib/
-
-      # Bước 4: Giải nén thư viện Audio
       - name: Giải nén thư viện Audio
         run: |
           mkdir -p lib
-          unzip -o lib/audioI2.zip -d lib/
+          unzip -o lib/AudioI2S.zip -d lib/
 
-      # Bước 5: Cập nhật và build project
-      - name: Cập nhật và build project
+      - name: Cập nhật và build
         run: |
           platformio update
           platformio run --environment lolin_s3_mini
 
-      # Bước 6: Upload firmware (tạo file .bin artifact)
       - name: Upload firmware
         uses: actions/upload-artifact@v4
         with:
