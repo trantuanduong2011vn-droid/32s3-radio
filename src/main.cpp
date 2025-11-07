@@ -2,37 +2,40 @@
 #include <WiFi.h>
 #include <HTTPClient.h>
 #include <TFT_eSPI.h>
-#include <Audio.h>  // từ thư viện ESP32-audioI2S
+#include <Audio.h>  // Thư viện âm thanh
 
-// Màn hình TFT
+// Cấu hình màn hình
 TFT_eSPI tft = TFT_eSPI();
 
 // Cấu hình WiFi
 const char* ssid = "Bin§Bon";
 const char* password = "khongcanpass";
 
-// Module âm thanh MAX98357A
+// Đối tượng Audio (MAX98357A)
 Audio audio;
 
 void setup() {
   Serial.begin(115200);
   tft.init();
+  tft.setRotation(1);
   tft.fillScreen(TFT_BLACK);
   tft.setTextColor(TFT_GREEN, TFT_BLACK);
-  tft.drawString("ESP32-S3 ST7789 Player", 20, 100);
+  tft.drawString("ESP32-S3 Internet Radio", 10, 50);
 
   WiFi.begin(ssid, password);
-  tft.drawString("Connecting WiFi...", 20, 130);
+  tft.drawString("Connecting WiFi...", 10, 100);
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
   }
   tft.fillScreen(TFT_BLACK);
-  tft.drawString("WiFi Connected!", 20, 120);
+  tft.drawString("WiFi Connected!", 10, 100);
 
-  // Khởi tạo audio
-  audio.setPinout(25, 26, 27); // LRCK, BCLK, DIN — chỉnh theo wiring của bạn
+  // Thiết lập chân I2S của module âm thanh
+  audio.setPinout(25, 26, 27); // LRCK, BCLK, DIN — chỉnh lại nếu cần
   audio.setVolume(15);
+
+  // Phát nhạc trực tuyến
   audio.connecttohost("https://icecast.radiofrance.fr/fip-midfi.mp3");
 }
 
