@@ -63,6 +63,6 @@ void setup() {
 }
 
 // ================== Vòng lặp ==================
-void loop() {
+void processLoop() {
   audio.processLoop();  // giữ luồng phát liên tục
 }
