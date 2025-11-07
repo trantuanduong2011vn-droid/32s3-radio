@@ -1,6 +1,5 @@
 #include <WiFi.h>
 #include <Arduino.h>
-#include <HTTPClient.h>
 #include <TFT_eSPI.h>
 #include <SPI.h>
 #include "Audio.h"
