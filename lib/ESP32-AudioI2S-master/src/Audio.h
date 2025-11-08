@@ -333,9 +333,9 @@ class Audio {
     } pid_array;
 
     File                m_audiofile;
-    NetworkClient       client;
-    NetworkClientSecure clientsecure;
-    NetworkClient*      m_client = nullptr;
+    WiFiClient       client;
+    WiFiClientSecure clientsecure;
+    WiFiClient*      m_client = nullptr;
 
     SemaphoreHandle_t mutex_playAudioData;
     SemaphoreHandle_t mutex_audioTask;
