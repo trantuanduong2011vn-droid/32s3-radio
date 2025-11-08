@@ -1,34 +1,30 @@
-name: Build ESP32S3 Firmware
+name: PlatformIO Build for LOLIN S3 Mini
 
 on:
   push:
-    branches: [ main ]
+    branches: [ "master" ]
   pull_request:
-    branches: [ main ]
+    branches: [ "master" ]
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+    - name: Checkout Code 🛎️
+      uses: actions/checkout@v4
+      with:
+        submodules: true
 
-      - name: Cài đặt PlatformIO
-        run: pip install -U platformio
+    - name: Set up Python and PlatformIO 🛠️
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.x'
+      
+    - name: Install PlatformIO Core
+      run: pip install platformio
 
-      - name: Giải nén thư viện Audio
-        run: |
-          mkdir -p lib
-          unzip -o lib/ESP32-AudioI2S-master-d lib/
-
-      - name: Cập nhật và build
-        run: |
-          platformio update
-          platformio run --environment lolin_s3_mini
-
-      - name: Upload firmware
-        uses: actions/upload-artifact@v4
-        with:
-          name: firmware
-          path: .pio/build/lolin_s3_mini/firmware.bin
+    # ------------------------------------------------------------------
+    # BƯỚC KHẮC PHỤC LỖI THƯ VIỆN AUDIOI2S (CHẠY TRÊN THƯ MỤC GỐC MASTER)
+    # ----------------------------------------------------------------
