@@ -25,6 +25,14 @@ jobs:
     - name: Install PlatformIO Core
       run: pip install platformio
 
-    # ------------------------------------------------------------------
+    # ----------    # ... (sau bước Run PlatformIO Build Command 🚀)
+    
+    - name: Upload Build Artifacts 📦
+      uses: actions/upload-artifact@v4
+      with:
+        name: firmware-lolin-s3-mini
+        path: .pio/build/lolin_s3_mini/
+        retention-days: 7 # Lưu trữ file trong 7 ngày
+-------------------------------------------------------
     # BƯỚC KHẮC PHỤC LỖI THƯ VIỆN AUDIOI2S (CHẠY TRÊN THƯ MỤC GỐC MASTER)
     # ----------------------------------------------------------------
