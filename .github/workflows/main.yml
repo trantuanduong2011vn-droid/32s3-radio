@@ -28,22 +28,8 @@ jobs:
     # ------------------------------------------------------------------
     # BƯỚC KHẮC PHỤC LỖI THƯ VIỆN AUDIOI2S (CHẠY TRÊN THƯ MỤC GỐC MASTER)
     # ------------------------------------------------------------------
-    - name: Tải, Giải nén và Sửa lỗi Thư viện Audio I2S 🎧
-      run: |
-        GITHUB_REPO_NAME="ESP32-audioI2S"
-        REPO_BRANCH="master" 
-        DIR_NAME_AFTER_UNZIP="${GITHUB_REPO_NAME}-${REPO_BRANCH}"
-        DOWNLOAD_URL="https://github.com/schreibfaul1/ESP32-audioI2S/archive/refs/heads/${REPO_BRANCH}.zip"
-        TEMP_ZIP_NAME="lib/audio_temp_master.zip" 
-        
-        mkdir -p lib
-        curl -L ${DOWNLOAD_URL} -o ${TEMP_ZIP_NAME}
-        unzip -o ${TEMP_ZIP_NAME} -d lib/
-        
-        FILE_TO_FIX="lib/${DIR_NAME_AFTER_UNZIP}/src/Audio.h"
-        sed -i 's/#include <NetworkClient.h>/#include <WiFiClient.h>/g' "${FILE_TO_FIX}"
-        
-        rm ${TEMP_ZIP_NAME}
+    - perl -pi -e 's/#include <NetworkClient.h>/#include <WiFiClient.h>/g' "${FILE_TO_FIX}"
+
 
     # ------------------------------------------------------------------
     # BƯỚC BIÊN DỊCH
