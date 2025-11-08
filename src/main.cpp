@@ -23,7 +23,7 @@ Audio audio;
 const char* radioStream = "https://stream.live.vc.bbcmedia.co.uk/bbc_world_service";
 
 // ================== Hàm setup ==================
-void setup() {
+void setup(); {
   Serial.begin(115200);
   delay(1000);
 
