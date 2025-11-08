@@ -20,7 +20,7 @@ jobs:
       - name: Giải nén thư viện Audio
         run: |
           mkdir -p lib
-          unzip -o lib/ESP32-AudioI2S.zip -d lib/
+          unzip -o lib/ESP32-audioI2S.zip -d lib/
 
       - name: Cập nhật và build
         run: |
