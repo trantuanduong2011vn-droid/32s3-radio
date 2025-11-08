@@ -13,7 +13,7 @@
 #include <Arduino.h>
 #include <FFat.h>
 #include <FS.h>
-#include <NetworkClient.h>
+#include <WiFiClient.h>
 #include <WiFiClientSecure.h>
 #include <SD.h>
 #include <SD_MMC.h>
