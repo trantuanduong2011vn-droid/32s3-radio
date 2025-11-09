@@ -4,69 +4,61 @@
 #include <SPI.h>
 #include "Audio.h"
 
-// ================== Cấu hình WiFi ==================
-// LƯU Ý: WiFi.begin() không hỗ trợ SSID có ký tự đặc biệt (như '§') trong mọi trường hợp. 
-// Nếu gặp lỗi, hãy thử đổi tên SSID.
-const char* ssid     = "Bin§Bon"; 
+// ================== WiFi Config ==================
+const char* ssid     = "BinBon";       // ⚠️ Đổi tên SSID bỏ ký tự đặc biệt
 const char* password = "khongcanpass";
 
-// ================== Cấu hình màn hình ST7789 ==================
-TFT_eSPI tft = TFT_eSPI();  // dùng config sẵn trong platformio.ini/User_Setup_Select.h
+// ================== TFT Display ==================
+TFT_eSPI tft = TFT_eSPI();  // TFT_eSPI config trong platformio.ini
 
-// ================== Cấu hình Audio MAX98357A ==================
+// ================== Audio MAX98357A ==================
 Audio audio;
 #define I2S_DOUT  25 
 #define I2S_BCLK  26
 #define I2S_LRC   27
 
-// ================== Link phát thử ==================
-const char* radioStream = "https://stream.live.vc.bbcmedia.co.uk/bbc_world_service";
+// ================== Link Radio ==================
+const char* radioStream = "http://stream.radioparadise.com/aac-320";
 
-// ================== Hàm setup ==================
-void setup(); {
+// ================== Setup ==================
+void setup() {
   Serial.begin(115200);
-  delay(1000);
-
-  // Khởi động màn hình
-  tft.init();
-  tft.setRotation(0);
-  tft.fillScreen(TFT_BLACK);
-  tft.setTextColor(TFT_CYAN, TFT_BLACK);
-  tft.setTextSize(2);
-  tft.setCursor(10, 30);
-  tft.println("ESP32-S3 Radio");
-  tft.setTextColor(TFT_WHITE);
-  tft.println("Connecting WiFi...");
-
-  // Kết nối WiFi
   WiFi.begin(ssid, password);
-  int counter = 0;
+  
+  Serial.print("🔌 Connecting to WiFi...");
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
-    tft.print(".");
-    if (++counter > 30) {
-      tft.println(" WiFi failed!");
-      Serial.println("WiFi connection failed.");
-      return;
-    }
+    Serial.print(".");
   }
-  tft.println("\nWiFi connected!");
-  tft.println(WiFi.localIP());
-  Serial.println("WiFi connected.");
+  Serial.println("\n✅ WiFi connected!");
+  Serial.println(WiFi.localIP());
 
-  // Cấu hình âm thanh (Sử dụng hàm mới của thư viện 3.4.x)
+  // Màn hình
+  tft.init();
+  tft.setRotation(2);
+  tft.fillScreen(TFT_BLACK);
+  tft.setTextColor(TFT_YELLOW, TFT_BLACK);
+  tft.drawString("ESP32-S3 Radio", 40, 100, 2);
+
+  // ================== Audio Config ==================
+  // ⚠️ Cấu hình pinout đúng cú pháp của AudioI2S v3.0.x
   audio.setPinout(I2S_BCLK, I2S_LRC, I2S_DOUT);
-  audio.setVolume(15); // âm lượng 0-21
-
-  // Bắt đầu phát radio (Sử dụng hàm mới connectToHost)
-  audio.connecttohost(radioStream);
-
-  tft.setTextColor(TFT_GREEN);
-  tft.println("Playing online radio...");
+  audio.setVolume(15); // Âm lượng (0-21)
+  
+  if (audio.connecttohost(radioStream)) {
+    tft.drawString("Đang phát Radio...", 30, 130, 2);
+  } else {
+    tft.drawString("Không kết nối được stream!", 10, 130, 2);
+  }
 }
 
-// ================== Vòng lặp BẮT BUỘC ==================
-void loop() { // << PHẢI là loop() (chữ thường)
-  audio.loop();  // << Hàm duy trì luồng phát của thư viện Audio 3.4.x
-  // Thêm các tác vụ khác (như cập nhật màn hình, kiểm tra nút nhấn) vào đây
+// ================== Loop ==================
+void loop() {
+  audio.loop();
+}
+
+// ================== Debug Callback (tuỳ chọn) ==================
+void audio_info(const char *info) {
+  Serial.print("Audio Info: ");
+  Serial.println(info);
 }
