@@ -13,9 +13,9 @@ TFT_eSPI tft = TFT_eSPI();  // TFT_eSPI config trong platformio.ini
 
 // ================== Audio MAX98357A ==================
 Audio audio;
-#define I2S_DOUT  25 
-#define I2S_BCLK  26
-#define I2S_LRC   27
+#define I2S_DOUT  7
+#define I2S_BCLK  5
+#define I2S_LRC   6
 
 // ================== Link Radio ==================
 const char* radioStream = "http://stream.radioparadise.com/aac-320";
