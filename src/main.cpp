@@ -45,7 +45,7 @@ void setup() {
   audio.setPinout(I2S_BCLK, I2S_LRC, I2S_DOUT);
   audio.setVolume(15); // Âm lượng (0-21)
   
-  if (audio.connectToHost(radioStream)) {
+  if (audio.connecttohost(radioStream)) {
     tft.drawString("Đang phát Radio...", 30, 130, 2);
   } else {
     tft.drawString("Không kết nối được stream!", 10, 130, 2);
@@ -54,7 +54,7 @@ void setup() {
 
 // ================== Loop ==================
 void loop() {
-  audio.processLoop();
+  audio.processloop();
 }
 
 // ================== Debug Callback (tuỳ chọn) ==================
