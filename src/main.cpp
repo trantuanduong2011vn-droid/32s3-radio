@@ -54,7 +54,7 @@ void setup() {
 
 // ================== Loop ==================
 void loop() {
-  audio.processloop();
+  audio.loop();
 }
 
 // ================== Debug Callback (tuỳ chọn) ==================
