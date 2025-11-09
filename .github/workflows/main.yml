@@ -1,28 +1,79 @@
-    # ... (các bước Setup Python và PlatformIO)
+name: PlatformIO Build for LOLIN S3 Mini
+
+on:
+  push:
+    # Kích hoạt khi có push vào các nhánh main hoặc master
+    branches: [ "main", "master" ]
+  pull_request:
+    # Kích hoạt khi có pull request
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+    # Cho phép chạy thủ công
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: 📦 Checkout Code
+      uses: actions/checkout@v4
+      with:
+        submodules: true
+
+    - name: 🐍 Set up Python & PlatformIO
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.x'
+      
+    - name: 🧰 Install PlatformIO Core
+      run: pip install platformio
 
     # ------------------------------------------------------------------
-    # Tải và sửa lỗi thư viện ESP32-AudioI2S v2.0.4 (ỔN ĐỊNH NHẤT)
+    # Tải và sửa lỗi thư viện ESP32-AudioI2S v2.0.4 (ỔN ĐỊNH VÀ TƯƠNG THÍCH)
+    # LƯU Ý: Hạ cấp để tránh lỗi driver/i2s_std.h
     # ------------------------------------------------------------------
     - name: 🎧 Download & Fix ESP32-AudioI2S Library
       run: |
-        TAG_VERSION="2.0.4"  # <--- KHUYẾN NGHỊ DÙNG 2.0.4 ĐỂ TRÁNH LỖI I2S_STD.H
+        TAG_VERSION="2.0.4"
         
-        # Đường dẫn tải xuống và thư mục
+        # Định nghĩa các đường dẫn
         ZIP_URL="https://github.com/schreibfaul1/ESP32-audioI2S/archive/refs/tags/${TAG_VERSION}.zip"
         LIB_DIR="lib/ESP32-audioI2S-${TAG_VERSION}"
         AUDIO_HEADER="${LIB_DIR}/src/Audio.h"
         
-        # Tải, giải nén
+        # 1. Tải và giải nén
         mkdir -p lib
+        echo "🔽 Tải thư viện ESP32-AudioI2S v${TAG_VERSION}..."
         curl -L -o lib/audio.zip ${ZIP_URL}
         unzip -o lib/audio.zip -d lib/
         
-        echo "🛠️ Sửa lỗi NetworkClient.h và các khai báo class..."
+        echo "🛠️ Bắt đầu sửa lỗi NetworkClient.h và khai báo class..."
         
-        # Sửa #include <NetworkClient.h> -> #include <WiFiClient.h>
+        # 2. Sửa #include <NetworkClient.h> -> #include <WiFiClient.h>
+        # Dùng PERL để sửa (Rất đáng tin cậy)
         perl -pi -e 's/#include <NetworkClient.h>/#include <WiFiClient.h>/g' "${AUDIO_HEADER}"
         
-        # Sửa khai báo biến: NetworkClient -> WiFiClient (Khắc phục lỗi sâu)
+        # 3. Sửa khai báo biến: NetworkClient client; -> WiFiClient client;
         perl -pi -e 's/NetworkClient(\*?) client/WiFiClient\1 client/g' "${AUDIO_HEADER}"
         
+        # 4. Xóa file zip tạm thời
         rm lib/audio.zip
+        echo "✅ Đã hoàn tất cấu hình thư viện ESP32-AudioI2S."
+
+    # ------------------------------------------------------------------
+    # BƯỚC BIÊN DỊCH
+    # ------------------------------------------------------------------
+    - name: 🚀 Build Firmware
+      run: |
+        platformio run
+
+    # ------------------------------------------------------------------
+    # BƯỚC UPLOAD ARTIFACTS
+    # ------------------------------------------------------------------
+    - name: 📤 Upload firmware artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: firmware-lolin-s3-mini
+        # Đường dẫn thư mục build của PlatformIO
+        path: .pio/build/lolin_s3_mini/
+        retention-days: 7 
