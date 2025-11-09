@@ -59,7 +59,7 @@ void setup(); {
   audio.setVolume(15); // âm lượng 0-21
 
   // Bắt đầu phát radio (Sử dụng hàm mới connectToHost)
-  audio.connectToHost(radioStream);
+  audio.connecttohost(radioStream);
 
   tft.setTextColor(TFT_GREEN);
   tft.println("Playing online radio...");
@@ -67,6 +67,6 @@ void setup(); {
 
 // ================== Vòng lặp BẮT BUỘC ==================
 void loop() { // << PHẢI là loop() (chữ thường)
-  audio.processLoop();  // << Hàm duy trì luồng phát của thư viện Audio 3.4.x
+  audio.loop();  // << Hàm duy trì luồng phát của thư viện Audio 3.4.x
   // Thêm các tác vụ khác (như cập nhật màn hình, kiểm tra nút nhấn) vào đây
 }
