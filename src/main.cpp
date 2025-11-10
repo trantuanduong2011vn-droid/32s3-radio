@@ -11,12 +11,6 @@ const char* password = "khongcanpass";
 // ================== TFT Display ==================
 TFT_eSPI tft = TFT_eSPI();  // TFT_eSPI config trong platformio.ini
 
-// ================== Audio MAX98357A ==================
-Audio audio;
-#define I2S_DOUT  25
-#define I2S_BCLK  26
-#define I2S_LRC   27
-
 // ================== Link Radio ==================
 const char* radioStream = "http://stream.radioparadise.com/aac-320";
 
