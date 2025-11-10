@@ -5,8 +5,7 @@
 #include "Audio.h"
 
 // ================== WiFi Config ==================
-const char* ssid     = "BinBon";       // ⚠️ Đổi tên SSID bỏ ký tự đặc biệt
-const char* password = "khongcanpass";
+WiFi.begin(ssid,paswork);
 
 // ================== TFT Display ==================
 TFT_eSPI tft = TFT_eSPI();  // TFT_eSPI config trong platformio.ini
