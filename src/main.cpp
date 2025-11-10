@@ -42,7 +42,6 @@ void setup() {
 
   // ================== Audio Config ==================
   // ⚠️ Cấu hình pinout đúng cú pháp của AudioI2S v3.0.x
-  audio.setPinout(I2S_BCLK, I2S_LRC, I2S_DOUT);
   audio.setVolume(15); // Âm lượng (0-21)
   
   if (audio.connecttohost(radioStream)) {
