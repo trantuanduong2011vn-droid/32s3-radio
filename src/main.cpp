@@ -35,10 +35,10 @@ void setup() {
 
   // ================== Audio Config ==================
   // ⚠️ Cấu hình pinout đúng cú pháp của AudioI2S v3.0.x
-  audio.setpinout(...)
-  audio.setVolume(15); // Âm lượng (0-21)
+  Audio.setpinout(...)
+  Audio.setVolume(15); // Âm lượng (0-21)
   
-  if (audio.connecttohost(radioStream)) {
+  if (Audio.connecttohost(radioStream)) {
     tft.drawString("Đang phát Radio...", 30, 130, 2);
   } else {
     tft.drawString("Không kết nối được stream!", 10, 130, 2);
@@ -47,7 +47,7 @@ void setup() {
 
 // ================== Loop ==================
 void loop() {
-  audio.loop();
+  Audio.loop();
 }
 
 // ================== Debug Callback (tuỳ chọn) ==================
