@@ -20,9 +20,9 @@ const char *radioStream = "http://radio.stream.url/here";
 #define TFT_HEIGHT      240
 #define TFT_MOSI        41 // SCL/SDA
 #define TFT_SCLK        42 // SCL/SDA
-#define TFT_DC          37 
-#define TFT_RST         38 
-#define TFT_CS          9  
+#define TFT_DC          19
+#define TFT_RST         18 
+#define TFT_CS          5 
 
 // KHAI BÁO ĐỐI TƯỢNG (OBJECTS)
 TFT_eSPI tft = TFT_eSPI();
