@@ -4,54 +4,76 @@
 #include <SPI.h>
 #include "Audio.h"
 
-// ================== WiFi Config ==================
-WiFi.begin(ssid,paswork);
+// =======================================================================
+// PHẠM VI TOÀN CỤC (GLOBAL SCOPE) - FIX LỖI PHẠM VI
+// =======================================================================
 
-// ================== TFT Display ==================
-TFT_eSPI tft = TFT_eSPI();  // TFT_eSPI config trong platformio.ini
+// ⚠️ CẤU HÌNH WIFI & STREAM (THAY THẾ BẰNG THÔNG TIN CỦA BẠN)
+const char* ssid = "Big§Bon"; 
+const char* password = "khongcanpass";
+const char *radioStream = "http://radio.stream.url/here"; 
 
-// ================== Link Radio ==================
-const char* radioStream = "http://stream.radioparadise.com/aac-320";
+// ⚠️ CẤU HÌNH CHÂN TFT SPI AN TOÀN (FIX LỖI CRASH COLD BOOT)
+// Sử dụng các chân an toàn: GPIO 9, 37, 38, 41, 42
+#define ST7789_DRIVER   1
+#define TFT_WIDTH       240
+#define TFT_HEIGHT      240
+#define TFT_MOSI        41 // SCL/SDA
+#define TFT_SCLK        42 // SCL/SDA
+#define TFT_DC          37 
+#define TFT_RST         38 
+#define TFT_CS          9  
 
-// ================== Setup ==================
+// KHAI BÁO ĐỐI TƯỢNG (OBJECTS)
+TFT_eSPI tft = TFT_eSPI();
+Audio myAudio; // Tên đối tượng là 'myAudio' để tránh nhầm lẫn với tên Class 'Audio'
+// =======================================================================
+
+
 void setup() {
-  Serial.begin(115200);
-  WiFi.begin(ssid, password);
-  
-  Serial.print("🔌 Connecting to WiFi...");
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-    Serial.print(".");
-  }
-  Serial.println("\n✅ WiFi connected!");
-  Serial.println(WiFi.localIP());
+    Serial.begin(115200);
 
-  // Màn hình
-  tft.init();
-  tft.setRotation(2);
-  tft.fillScreen(TFT_BLACK);
-  tft.setTextColor(TFT_YELLOW, TFT_BLACK);
-  tft.drawString("ESP32-S3 Radio", 40, 100, 2);
+    // ================== KHỞI TẠO TFT ==================
+    // Cấu hình chân an toàn đã giúp chip khởi động
+    tft.init();
+    tft.setRotation(1);
+    tft.fillScreen(TFT_BLACK);
+    tft.setTextColor(TFT_WHITE);
+    tft.drawString("Connecting...", 20, 20, 4);
+    
+    // ================== KHỞI TẠO WIFI ==================
+    Serial.print("Connecting to WiFi ");
+    Serial.print(ssid);
+    
+    WiFi.begin(ssid, password);
+    
+    // Vòng lặp chờ kết nối WiFi
+    while (WiFi.status() != WL_CONNECTED) {
+        delay(500);
+        Serial.print(".");
+    }
+    
+    Serial.println();
+    Serial.print("Connected! IP address: ");
+    Serial.println(WiFi.localIP());
+    tft.drawString("WiFi OK!", 20, 40, 2);
 
-  // ================== Audio Config ==================
-  // ⚠️ Cấu hình pinout đúng cú pháp của AudioI2S v3.0.x
-  Audio.setpinout(...)
-  Audio.setVolume(15); // Âm lượng (0-21)
-  
-  if (Audio.connecttohost(radioStream)) {
-    tft.drawString("Đang phát Radio...", 30, 130, 2);
-  } else {
-    tft.drawString("Không kết nối được stream!", 10, 130, 2);
-  }
+    // ================== KHỞI TẠO AUDIO (CÚ PHÁP V2.0.4) ==================
+    // 🛑 KHÔNG dùng setpinout() để sử dụng I2S nối cứng trên mainboard
+
+    // Sử dụng cú pháp chữ thường đã xác nhận hoạt động
+    myAudio.setvolume(15); 
+
+    // Sử dụng cú pháp chữ thường đã xác nhận hoạt động
+    if (myAudio.connecttohost(radioStream)) { 
+        Serial.println("Connected to stream.");
+    } else {
+        Serial.println("Connection failed.");
+    }
 }
 
-// ================== Loop ==================
 void loop() {
-  Audio.loop();
-}
-
-// ================== Debug Callback (tuỳ chọn) ==================
-void audio_info(const char *info) {
-  Serial.print("Audio Info: ");
-  Serial.println(info);
+    // Sử dụng cú pháp chữ thường đã xác nhận hoạt động
+    myAudio.loop(); 
+    delay(1);
 }
