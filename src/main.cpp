@@ -62,7 +62,7 @@ void setup() {
     // 🛑 KHÔNG dùng setpinout() để sử dụng I2S nối cứng trên mainboard
 
     // Sử dụng cú pháp chữ thường đã xác nhận hoạt động
-    myAudio.setvolume(15); 
+    myAudio.setVolume(15); 
 
     // Sử dụng cú pháp chữ thường đã xác nhận hoạt động
     if (myAudio.connecttohost(radioStream)) { 
