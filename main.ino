@@ -15,9 +15,9 @@ const char* ssid = "Bin§Bon";
 const char* password = "khongcanpass";
 
 // I2S pins for MAX98357A
-#define I2S_BCLK 26
-#define I2S_LRC 25
-#define I2S_DOUT 22
+#define I2S_BCLK 7
+#define I2S_LRC 8
+#define I2S_DOUT 9
 
 // Button pin to change station (active LOW)
 #define BTN_NEXT 0
