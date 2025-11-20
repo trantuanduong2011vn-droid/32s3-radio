@@ -10,10 +10,10 @@ IMPORTANT:
     #define ST7789_DRIVER
     #define TFT_WIDTH 240
     #define TFT_HEIGHT 240
-    #define TFT_MOSI 23
-    #define TFT_SCLK 18
-    #define TFT_DC    2
-    #define TFT_RST   4
+    #define TFT_MOSI 41
+    #define TFT_SCLK 42
+    #define TFT_DC   19
+    #define TFT_RST  18
     #define TFT_CS    5
  - After pushing to GitHub, run the workflow in Actions and download artifact 'firmware'.
 
